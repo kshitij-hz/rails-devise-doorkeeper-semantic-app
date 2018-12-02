@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>AuthApp</title>
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+  </head>
+
+  <body>
+    <div class="ui menu">
+      <div class="header item">
+        AuthApp
+      </div>
+      <a class="item" href="<%= root_path %>">
+        Home
+      </a>
+      <div class="right menu">
+        <div class="right menu">
+          <% if user_signed_in? %>
+          <div class="ui simple dropdown item">
+            <%= current_user.name %>
+            <i class="dropdown icon"></i>
+            <div class="menu">
+              <a class="item" href="<%= edit_user_registration_path %>">Profile</a>
+              <!-- <a class="item" href="<%= destroy_user_session_path %>">Log out</a> -->
+              <%= link_to 'Log out', destroy_user_session_path, method: :delete, class: "item" %>
+            </div>
+          </div>
+          <% else %>
+          <%= link_to 'Log In', new_user_session_path, class: "item" %>
+          <%= link_to 'Sign Up', new_user_registration_path, class: "item" %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+    <% unless flash.empty? %>
+    <script type="text/javascript">
+        <% flash.each do |f| %>
+        <% type = f[0].to_s.gsub('alert', 'error').gsub('notice', 'success') %>
+         toastr['<%= type %>']('<%= f[1] %>');
+        <% end %>
+    </script>
+   <% end %>
+
+    <%= yield :top_content %>
+
+    <div class="container">
+        <h1><%= yield :header %></h1>
+      <%= yield %>
+    </div>
+  </body>
+</html>
